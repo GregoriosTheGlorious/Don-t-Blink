@@ -11,7 +11,22 @@ Best score is saved on the player’s own device.
 2. Click **Add file → Upload files**, drag in everything from this folder (`index.html`, `manifest.webmanifest`, `sw.js`, the `.png` files and this README), then **Commit changes**.
 3. Go to **Settings → Pages**. Under **Build and deployment**, choose **Deploy from a branch**, pick `main` and `/ (root)`, and save.
 4. After a minute or two, your game is live at `https://YOUR-USERNAME.github.io/dont-blink/`.
-5. Open `index.html` in GitHub, click the pencil icon, and change `og:image` to the full address of the preview image, for example `https://YOUR-USERNAME.github.io/dont-blink/og-image.png`. Commit. This is what makes the link show a nice preview when you text or post it.
+5. In **Settings → Pages**, set the custom domain to `dontblink.ink` (the `CNAME` file in this folder already says so) and follow the domain steps below.
+
+## Connect dontblink.ink
+
+At your domain registrar, open the DNS settings for `dontblink.ink` and add:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `YOUR-USERNAME.github.io` |
+
+Wait for DNS to update (minutes to a few hours), then go back to **Settings → Pages** and tick **Enforce HTTPS**.
+Share `https://dontblink.ink/`, not the github.io address, so everyone’s best score is saved in one place.
 
 ## Try it on a phone
 
