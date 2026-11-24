@@ -203,6 +203,69 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* Home button row: leaderboard, play, help */
+.home-btns { display: flex; gap: 0.6rem; width: min(100%, 17rem); }
+.home-btns .btn { width: auto; height: 60px; padding: 0; display: grid; place-items: center; text-decoration: none; }
+.home-btns .btn.play { flex: 2; }
+.home-btns .btn.ghost { flex: 1; height: 60px; color: var(--fg); }
+.home-btns svg { width: 26px; height: 26px; }
+.home-btns .play svg { width: 30px; height: 30px; fill: #000; }
+.home-btns .ghost svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.home-btns .q { font-family: var(--font-display); font-weight: 700; font-size: 1.7rem; line-height: 1; }
+
+/* Ad slot (home screen only, above the sound row) + footer link */
+.ad { width: 320px; max-width: 100%; height: 50px; margin: 0 auto 0.2rem; flex: none; overflow: hidden; }
+.ad[hidden] { display: none; }
+.legal { display: flex; gap: 1.2rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+.legal a { color: var(--dim); text-decoration: none; padding: 0.35rem 0.2rem; }
+.legal a:active { color: var(--fg); }
+@media (max-height: 720px) { .rule { display: none; } }
+
+/* Layout budget: top zone holds ad + sound row + title, bottom zone holds buttons. The ring takes what is left. */
+h1.title { font-size: clamp(2.3rem, 13vw, 4rem); }
+@media (min-height: 760px) { h1.title { font-size: clamp(2.8rem, 15vw, 4.6rem); } }
+#app { grid-template-rows: minmax(190px, 1fr) auto minmax(150px, 1fr); }
+:root { --S: min(86vw, calc(100vh - 365px), 420px); }
+@supports (height: 1dvh) { :root { --S: min(86vw, calc(100dvh - 365px), 420px); } }
+
+/* Leaderboard */
+.btn-row { display: flex; gap: 0.6rem; width: min(100%, 17rem); }
+.btn-row .btn.ghost { flex: 1; width: auto; padding: 0 0.3rem; font-size: 0.75rem; letter-spacing: 0.12em; }
+.rank-line { color: var(--dim); font-size: 0.8125rem; letter-spacing: 0.04em; min-height: 1.15em; text-align: center; }
+.rank-line b { color: var(--accent); font-family: var(--font-display); }
+.sheet {
+  position: absolute; inset: 0; z-index: 7; background: #000;
+  display: flex; flex-direction: column; align-items: center; padding: 1.2rem 1.2rem 1.4rem;
+}
+.sheet[hidden] { display: none; }
+.sheet.mid { justify-content: center; gap: 0.9rem; text-align: center; }
+.sheet h2 { margin: 0; font-family: var(--font-display); font-size: 1.5rem; letter-spacing: 0.04em; }
+.sheet p { margin: 0; color: var(--dim); max-width: 17rem; }
+.board-head { display: flex; justify-content: space-between; align-items: center; width: min(100%, 24rem); }
+.board-head .icon-btn { margin-right: -10px; }
+.tabs { display: flex; width: min(100%, 24rem); margin: 1rem 0 0.4rem; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.tab {
+  flex: 1; height: 38px; appearance: none; border: 0; background: transparent; color: var(--dim); cursor: pointer;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.8125rem; letter-spacing: 0.14em;
+}
+.tab[aria-selected="true"] { background: var(--accent); color: #000; }
+.rows { list-style: none; margin: 0; padding: 0; width: min(100%, 24rem); flex: 1; overflow: hidden; }
+.rows li { display: flex; align-items: baseline; gap: 0.8rem; padding: 0.62rem 0.2rem; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.rows .rk { width: 1.8rem; color: var(--dim); font-size: 0.875rem; }
+.rows li:nth-child(-n+3) .rk { color: var(--accent); }
+.rows .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.rows .sc { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+.rows li.me .nm, .rows li.me .sc { color: var(--accent); }
+.board-msg { color: var(--dim); text-align: center; margin-top: 2.5rem; }
+.board-foot { width: min(100%, 24rem); display: flex; justify-content: space-between; color: var(--dim); font-size: 0.8125rem; padding-top: 0.8rem; }
+.linkbtn { appearance: none; background: none; border: 0; color: var(--fg); text-decoration: underline; font: inherit; cursor: pointer; padding: 0; }
+.name-input {
+  -webkit-user-select: text; user-select: text; width: min(100%, 17rem); height: 54px; text-align: center;
+  background: #0a0f0a; color: var(--fg); border: 1px solid var(--line); border-radius: 12px; outline: none;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.06em;
+}
+.name-input:focus { border-color: var(--accent); }
+
 @media (prefers-reduced-motion: reduce) {
   .stage.shake, .score.bump, .streak b.bump { animation: none; }
   .pop.go { animation: none; opacity: 1; }
@@ -213,6 +276,8 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 <body>
 <main id="app" data-screen="home">
   <div class="top">
+    <div class="ad only-home" id="adSlot" hidden></div>
+    <div class="ad only-over" id="adSlot2" hidden></div>
     <div class="bar">
       <span class="label bar-best">Best<b id="bestTop">0</b></span>
       <button id="soundBtn" class="icon-btn" type="button" aria-label="Sound" aria-pressed="true">
@@ -228,6 +293,7 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
       <div class="only-over" style="flex-direction:column;align-items:center;gap:.7rem">
         <span class="pill" id="newBest" hidden>NEW BEST</span>
         <h2 class="over-title">Game over</h2>
+        <div class="rank-line" id="rankLine" aria-live="polite"></div>
       </div>
     </div>
   </div>
@@ -243,8 +309,9 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 
   <div class="bottom">
     <div class="only-home" style="flex-direction:column;align-items:center;gap:.9rem;width:100%">
-      <button id="playBtn" class="btn" type="button">PLAY</button>
+      <div class="home-btns"><button id="boardBtn" class="btn ghost" type="button" aria-label="Leaderboard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0V4zM8 6H5.5a2.5 2.5 0 0 0 2.6 3.6M16 6h2.5a2.5 2.5 0 0 1-2.6 3.6M12 13v4M8.5 20h7M10 17h4"></path></svg></button><button id="playBtn" class="btn play" type="button" aria-label="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg></button><a id="helpBtn" class="btn ghost" href="about.html" aria-label="How to play"><span class="q" aria-hidden="true">?</span></a></div>
       <p class="rule">Tap anywhere to stop the dot inside the green. Every hit gets faster and tighter.</p>
+      <nav class="legal" aria-label="Info"><a href="privacy.html">Privacy</a></nav>
     </div>
     <div class="only-play" style="flex-direction:column;align-items:center;gap:.8rem">
       <div class="streak only-play" id="streak">
@@ -257,13 +324,37 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
     <div class="only-over" style="flex-direction:column;align-items:center;gap:.7rem;width:100%">
       <div class="best-line only-over"><span class="label">Best</span><b id="bestOver">0</b></div>
       <button id="restartBtn" class="btn" type="button">PLAY AGAIN</button>
-      <button id="shareBtn" class="btn ghost" type="button">SHARE SCORE</button>
+      <div class="btn-row">
+        <button id="boardBtn2" class="btn ghost" type="button">LEADERBOARD</button>
+        <button id="shareBtn" class="btn ghost" type="button">SHARE SCORE</button>
+      </div>
     </div>
   </div>
 
   <div class="pause" id="pause" hidden>
     <h2>Paused</h2>
     <p>Tap anywhere to resume</p>
+  </div>
+  <div class="sheet" id="board" hidden role="dialog" aria-label="Leaderboard">
+    <div class="board-head">
+      <h2>Leaderboard</h2>
+      <button class="icon-btn" id="boardClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" id="tabToday" type="button" role="tab" aria-selected="true">TODAY</button>
+      <button class="tab" id="tabAll" type="button" role="tab" aria-selected="false">ALL-TIME</button>
+    </div>
+    <ol class="rows" id="rows"></ol>
+    <div class="board-foot"><span id="meLine"></span><button class="linkbtn" id="changeName" type="button">Change name</button></div>
+  </div>
+  <div class="sheet mid" id="nameSheet" hidden role="dialog" aria-label="Choose a name">
+    <h2 id="nameTitle">Pick a nickname</h2>
+    <p id="nameSub">Choose carefully, it can&rsquo;t be changed later.</p>
+    <input class="name-input" id="nameInput" type="text" maxlength="12" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="NAME" aria-label="Nickname">
+    <button class="btn" id="nameSave" type="button">SAVE</button>
+    <button class="linkbtn" id="nameSkip" type="button">Not now</button>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </main>
@@ -346,7 +437,7 @@ function pickTarget(markerAngle, dir, rnd) {
   let marker = -Math.PI / 2, dir = 1, speed = 90, width = 64;
   let target = 0.6, targetAlpha = 0.5, targetWanted = 0.5;
   let timer = 0, after = null, pausedFrom = null;
-  let flashT = 0, missed = false, overGuard = 0, mScale = 1;
+  let flashT = 0, missed = false, overGuard = 0, mScale = 1, lastRounds = 0, lastMs = 0;
   let warnT = 0, shield = false, zoneQueue = [], zoneMult = 1, lastTight = true;
   function pullMult() {
     if (!zoneQueue.length) zoneQueue = buildBlock(Math.random, lastTight);
@@ -493,6 +584,7 @@ function pickTarget(markerAngle, dir, rnd) {
     ensureAudio(); requestWake();
     score = 0; streak = 0; round = 0; dir = 1; missed = false; flashT = 0; pulses.length = 0; mScale = 1;
     warnT = 0; shield = false; zoneQueue = []; lastTight = true; zoneMult = pullMult();
+    playStart = performance.now(); subToken++; rankLine.textContent = '';
     applyDifficulty();
     marker = -Math.PI / 2;
     target = pickTarget(marker, dir, Math.random());
@@ -560,7 +652,10 @@ function pickTarget(markerAngle, dir, rnd) {
     $('newBest').hidden = !isNew;
     $('bestOver').textContent = best;
     setScreen('over');
+    lastRounds = round; lastMs = Math.round(performance.now() - playStart);
     state = 'over'; overGuard = performance.now() + 450;
+    afterGameOver();
+    initOverAd();
     releaseWake();
   }
 
@@ -602,7 +697,7 @@ function pickTarget(markerAngle, dir, rnd) {
 
   /* ---------- input ---------- */
   document.addEventListener('pointerdown', function (e) {
-    if (e.target.closest && e.target.closest('button')) return;
+    if (e.target.closest && e.target.closest('button, input, .sheet')) return;
     ensureAudio();
     if (state === 'paused') { e.preventDefault(); resumeGame(); return; }
     if (state === 'play') { e.preventDefault(); stopMarker(); }
@@ -611,7 +706,8 @@ function pickTarget(markerAngle, dir, rnd) {
   document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   document.addEventListener('keydown', function (e) {
     if (e.code !== 'Space' && e.key !== ' ') return;
-    if (e.target.closest && e.target.closest('button')) return;
+    if (e.target.closest && e.target.closest('button, input')) return;
+    if (!boardEl.hidden || !nameSheet.hidden) return;
     e.preventDefault();
     if (state === 'play') stopMarker();
     else if (state === 'paused') resumeGame();
@@ -658,8 +754,157 @@ function pickTarget(markerAngle, dir, rnd) {
     update(dt); draw();
   }
 
+  /* ---------- leaderboard (Supabase) ---------- */
+  const SB_URL = 'https://mrfxhyjkcdwdocgriaop.supabase.co';
+  const SB_KEY = 'sb_publishable_SfMeTPj2LrppxfTHh7W4hg_xWvqPJqO';
+  const boardEl = $('board'), nameSheet = $('nameSheet'), nameInput = $('nameInput'), rankLine = $('rankLine'), rowsEl = $('rows');
+  function rpc(fn, body) {
+    const ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, 7000);
+    return fetch(SB_URL + '/rest/v1/rpc/' + fn, {
+      method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}), signal: ctl.signal
+    }).then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('http ' + r.status); return r.json(); },
+            function (e) { clearTimeout(t); throw e; });
+  }
+  function uuid() {
+    try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
+  }
+  let deviceId = getItem('dontblink.dev');
+  if (!deviceId) { deviceId = uuid(); setItem('dontblink.dev', deviceId); }
+  let myName = getItem('dontblink.name') || '';
+  let nameTemp = getItem('dontblink.temp') === '1';
+  let nameMode = 'first';
+  let sent = { day: '', score: 0 };
+  try { sent = JSON.parse(getItem('dontblink.sent') || '') || sent; } catch (e) {}
+  let playStart = 0, subToken = 0, boardTab = 'today', boardToken = 0;
+  function dayKey() {
+    try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); }
+  }
+  function setTemp() {
+    let n = '';
+    for (let i = 0; i < 5; i++) n += Math.floor(Math.random() * 10);
+    myName = 'Guest-' + n; nameTemp = true;
+    setItem('dontblink.name', myName); setItem('dontblink.temp', '1');
+  }
+  function cleanName(v) { return String(v || '').replace(/[^A-Za-z0-9 _.\-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 12); }
+  function esc(v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function doSubmit() {
+    if (score <= 0 || !myName) return;
+    const tok = ++subToken, rounds = lastRounds, ms = lastMs, sc = score;
+    rankLine.textContent = 'Posting score…';
+    rpc('submit_score', { p_device: deviceId, p_name: myName, p_score: sc, p_rounds: rounds, p_duration_ms: ms }).then(function (res) {
+      if (tok !== subToken) return;
+      if (res && res.ok) {
+        const k = dayKey();
+        sent = { day: k, score: Math.max(sent.day === k ? sent.score : 0, sc) }; setItem('dontblink.sent', JSON.stringify(sent));
+        rankLine.innerHTML = 'Today <b>#' + res.rank_today + '</b> · All-time <b>#' + res.rank_all + '</b>';
+      } else if (res && res.error === 'name') {
+        setTemp(); rankLine.textContent = ''; toast('That name is not allowed. Pick another'); openName('change');
+      } else { rankLine.textContent = ''; }
+    }).catch(function () { if (tok === subToken) rankLine.textContent = 'Offline: score not posted'; });
+  }
+  function afterGameOver() {
+    rankLine.textContent = '';
+    if (score <= 0) return;
+    const k = dayKey(), done = sent.day === k ? sent.score : 0;
+    if (!myName) setTemp();
+    if (score > done) doSubmit();
+  }
+  function openName(mode) {
+    nameMode = mode || 'first';
+    $('nameTitle').textContent = nameMode === 'change' ? 'Choose your name' : 'Pick a nickname';
+    $('nameSub').textContent = nameMode === 'change'
+      ? 'Make it count. Once you save a name it can\u2019t be changed.'
+      : 'Choose carefully, it can\u2019t be changed later. Skip and you\u2019ll get a guest name you can swap once.';
+    $('nameSkip').textContent = nameMode === 'change' ? 'Cancel' : 'Not now';
+    nameInput.value = ''; nameSheet.hidden = false;
+    setTimeout(function () { try { nameInput.focus(); } catch (e) {} }, 60);
+  }
+  function closeName() { nameSheet.hidden = true; try { nameInput.blur(); } catch (e) {} }
+  function afterNameChosen() {
+    updateMeLine();
+    if (state === 'over') { const k = dayKey(); if (score > (sent.day === k ? sent.score : 0)) doSubmit(); }
+  }
+  $('nameSave').addEventListener('click', function () {
+    const n = cleanName(nameInput.value);
+    if (!n) { toast('Type a name first'); return; }
+    myName = n; nameTemp = false; setItem('dontblink.name', n); setItem('dontblink.temp', '0');
+    closeName(); afterNameChosen();
+  });
+  function skipName() {
+    closeName();
+    if (!myName) { setTemp(); afterNameChosen(); }
+  }
+  $('nameSkip').addEventListener('click', skipName);
+  nameInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') $('nameSave').click(); });
+
+  function updateMeLine() {
+    $('meLine').textContent = myName ? 'Playing as ' + myName : 'No name yet';
+    $('changeName').hidden = !(myName && nameTemp);
+  }
+  function setTab(t) {
+    boardTab = t;
+    $('tabToday').setAttribute('aria-selected', t === 'today' ? 'true' : 'false');
+    $('tabAll').setAttribute('aria-selected', t === 'all' ? 'true' : 'false');
+    loadBoard();
+  }
+  function loadBoard() {
+    const tok = ++boardToken;
+    rowsEl.innerHTML = '<li class="board-msg" style="display:block;border:0">Loading…</li>';
+    rpc('get_top', { p_period: boardTab }).then(function (list) {
+      if (tok !== boardToken) return;
+      if (!Array.isArray(list) || !list.length) { rowsEl.innerHTML = '<li class="board-msg" style="display:block;border:0">No scores yet. Be the first.</li>'; return; }
+      rowsEl.innerHTML = list.map(function (r, i) {
+        const me = myName && String(r.name).toLowerCase() === myName.toLowerCase();
+        return '<li' + (me ? ' class="me"' : '') + '><span class="rk">' + (i + 1) + '</span><span class="nm">' + esc(r.name) + '</span><span class="sc">' + Number(r.score) + '</span></li>';
+      }).join('');
+    }).catch(function () {
+      if (tok !== boardToken) return;
+      rowsEl.innerHTML = '<li class="board-msg" style="display:block;border:0">Couldn’t load scores.<br>Check your connection.</li>';
+    });
+  }
+  function openBoard() { updateMeLine(); boardEl.hidden = false; setTab('today'); }
+  function closeBoard() { boardEl.hidden = true; }
+  $('boardBtn').addEventListener('click', openBoard);
+  $('boardBtn2').addEventListener('click', openBoard);
+  $('boardClose').addEventListener('click', closeBoard);
+  $('tabToday').addEventListener('click', function () { setTab('today'); });
+  $('tabAll').addEventListener('click', function () { setTab('all'); });
+  $('changeName').addEventListener('click', function () { if (nameTemp) openName('change'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (!nameSheet.hidden) skipName(); else if (!boardEl.hidden) closeBoard(); } });
+
+  /* ---------- ad banner (home screen only; stays off until both ids are filled in) ---------- */
+  const ADS_CLIENT = '';   // your AdSense publisher id, e.g. 'ca-pub-1234567890123456'
+  const ADS_SLOT = '';     // the numeric id of your 320x50 ad unit
+  let adLib = false;
+  function loadAd(id) {
+    const box = $(id);
+    box.innerHTML = '<ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="' + ADS_CLIENT + '" data-ad-slot="' + ADS_SLOT + '"></ins>';
+    box.hidden = false;
+    const push = function () { try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {} };
+    if (adLib) { push(); return; }
+    adLib = true;
+    const sc = document.createElement('script');
+    sc.async = true; sc.crossOrigin = 'anonymous';
+    sc.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + encodeURIComponent(ADS_CLIENT);
+    sc.onload = push;
+    document.head.appendChild(sc);
+  }
+  let adHome = false, adOver = false;
+  function initAd() {            // home banner, once per visit
+    if (!ADS_CLIENT || !ADS_SLOT || adHome || state !== 'home') return;
+    adHome = true; loadAd('adSlot');
+  }
+  function initOverAd() {        // game-over banner, requested once per visit (no refreshing)
+    if (!ADS_CLIENT || !ADS_SLOT || adOver) return;
+    adOver = true; loadAd('adSlot2');
+  }
+  window.addEventListener('load', function () { setTimeout(initAd, 1200); });
+
   /* ---------- boot ---------- */
   renderSound(); renderStreak(); setScreen('home');
+  if (!myName) openName('first');
   resize(); draw();
   requestAnimationFrame(frame);
 })();

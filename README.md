@@ -47,3 +47,9 @@ Everything lives near the top of the script in `index.html`, between `LOGIC_STAR
 - `markerScale()`: how fast the ball shrinks.
 - `scoreFor()`: points per hit.
 - `shieldEarned()`: how many perfect hits earn a shield.
+
+## Leaderboard + ads (added Nov 24, 2026)
+- Run `scoreboard.sql` once in Supabase (SQL Editor) before deploying index.html.
+- about.html and privacy.html contain the token {{CONTACT_EMAIL}} twice each. Replace it with your real contact email before uploading.
+- The ad banner stays OFF until ADS_CLIENT and ADS_SLOT are filled in near the end of index.html.
+- After AdSense approves the site, add ads.txt at the repo root with:  google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
