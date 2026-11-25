@@ -1,6 +1,6 @@
 // Caches the game so it opens instantly and works offline.
-// If you ever change the file list below, bump CACHE to dont-blink-v6, v3, ...
-const CACHE = 'dont-blink-v6';
+// If you ever change the file list below, bump CACHE to dont-blink-v7, v3, ...
+const CACHE = 'dont-blink-v7';
 const ASSETS = ['./about.html', './privacy.html', './', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png', './favicon-32.png'];
 
 self.addEventListener('install', (e) => {
